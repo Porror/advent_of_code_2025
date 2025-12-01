@@ -47,7 +47,6 @@ pub fn solve1() {
         if safe.get() == 0 {
             _answer += 1;
         }
-        println!("Safe value: {}, tzero: {}", safe.get(), safe.tzero());
     }
     println!("Solution to problem 1: {:?}", _answer);
     println!("Solution to problem 2: {:?}", safe.tzero());
