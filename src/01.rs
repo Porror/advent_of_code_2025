@@ -20,7 +20,12 @@ impl Safe {
     fn remove(&mut self, mut v: i16) {
         let times100 = v / 100;
         v = v % 100;
-        self.tzero += times100 as u16 + if v >= self.value && self.value != 0 { 1 } else { 0 };
+        self.tzero += times100 as u16
+            + if v >= self.value && self.value != 0 {
+                1
+            } else {
+                0
+            };
         self.value = (100 + self.value - v) % 100; // to avoid negative values since value and v are always between 0 and 99
     }
     fn get(&self) -> i16 {
@@ -50,4 +55,56 @@ pub fn solve1() {
     }
     println!("Solution to problem 1: {:?}", _answer);
     println!("Solution to problem 2: {:?}", safe.tzero());
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    /*
+    verifying test data:
+    L68
+    L30
+    R48
+    L5
+    R60
+    L55
+    L1
+    L99
+    R14
+    L82
+    */
+    #[test]
+    fn test_safe() {
+        let mut safe = Safe::new();
+        safe.remove(68); // 1
+        assert_eq!(safe.get(), 82);
+        assert_eq!(safe.tzero(), 1);
+        safe.remove(30);
+        assert_eq!(safe.get(), 52);
+        assert_eq!(safe.tzero(), 1);
+        safe.add(48); // 2
+        assert_eq!(safe.get(), 0);
+        assert_eq!(safe.tzero(), 2);
+        safe.remove(5);
+        assert_eq!(safe.get(), 95);
+        assert_eq!(safe.tzero(), 2);
+        safe.add(60); // 3
+        assert_eq!(safe.get(), 55);
+        assert_eq!(safe.tzero(), 3);
+        safe.remove(55); // 4
+        assert_eq!(safe.get(), 0);
+        assert_eq!(safe.tzero(), 4);
+        safe.remove(1);
+        assert_eq!(safe.get(), 99);
+        assert_eq!(safe.tzero(), 4);
+        safe.remove(99); // 5
+        assert_eq!(safe.get(), 0);
+        assert_eq!(safe.tzero(), 5);
+        safe.add(14);
+        assert_eq!(safe.get(), 14);
+        assert_eq!(safe.tzero(), 5);
+        safe.remove(82); // 6
+        assert_eq!(safe.get(), 32);
+        assert_eq!(safe.tzero(), 6);
+    }
 }
