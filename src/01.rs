@@ -30,7 +30,7 @@ impl Safe {
         self.tzero
     }
 }
-pub fn solve() {
+pub fn solve1() {
     let content =
         fs::read_to_string(if TEST { "01.test" } else { "01.data" }).expect("Unable to read file");
     let inputs = content.lines();
