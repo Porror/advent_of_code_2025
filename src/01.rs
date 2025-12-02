@@ -1,5 +1,4 @@
 use std::fs;
-const TEST: bool = false;
 struct Safe {
     value: i16,
     tzero: u16,
@@ -35,9 +34,9 @@ impl Safe {
         self.tzero
     }
 }
-pub fn solve1() {
-    let content =
-        fs::read_to_string(if TEST { "01.test" } else { "01.data" }).expect("Unable to read file");
+pub fn solve1(test: bool) -> crate::Solutions {
+    let content = fs::read_to_string(if test { "data/01.test" } else { "data/01.data" })
+        .expect("Unable to read file");
     let inputs = content.lines();
     let mut _answer: u16 = 0;
     let mut safe = Safe::new();
@@ -55,24 +54,14 @@ pub fn solve1() {
     }
     println!("Solution to problem 1: {:?}", _answer);
     println!("Solution to problem 2: {:?}", safe.tzero());
+    Solutions::One {}
 }
 
+
+
 #[cfg(test)]
-mod tests {
+mod test1 {
     use super::*;
-    /*
-    verifying test data:
-    L68
-    L30
-    R48
-    L5
-    R60
-    L55
-    L1
-    L99
-    R14
-    L82
-    */
     #[test]
     fn test_safe() {
         let mut safe = Safe::new();
