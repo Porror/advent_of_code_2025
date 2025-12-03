@@ -1,5 +1,6 @@
 include!("01.rs");
 include!("02.rs");
+include!("03.rs");
 pub enum Solutions {
     One {},
     Two {
@@ -7,6 +8,12 @@ pub enum Solutions {
         elements: Vec<u64>,
         sum_complete: u64,
         complete_elements: Vec<u64>,
+    },
+    Three {
+        sum1: u32,
+        batteries1: Vec<u32>,
+        sum2: u64,
+        batteries2: Vec<u64>,
     },
 }
 
@@ -41,6 +48,37 @@ impl std::fmt::Debug for Solutions {
                     }
                 )
             }
+            Solutions::Three {
+                sum1,
+                batteries1,
+                sum2,
+                batteries2,
+            } => {
+                write!(
+                    f,
+                    "Solution Three: sum1 = {}, batteries1 = {:?}, sum2 = {}, batteries2 = {:?}",
+                    sum1,
+                    if batteries1.len() < 10 {
+                        format!("{:?}", batteries1)
+                    } else {
+                        format!(
+                            "[{} ... {}]",
+                            batteries1[0],
+                            batteries1[batteries1.len() - 1]
+                        )
+                    },
+                    sum2,
+                    if batteries2.len() < 10 {
+                        format!("{:?}", batteries2)
+                    } else {
+                        format!(
+                            "[{} ... {}]",
+                            batteries2[0],
+                            batteries2[batteries2.len() - 1]
+                        )
+                    }
+                )
+            }
         }
     }
 }
@@ -67,6 +105,7 @@ fn solve(exercise: &str, test: bool) {
     let solution = match exercise {
         "01" => solve1(test),
         "02" => solve2(&content),
+        "03" => solve3(&content),
         _ => {
             panic!("Exercise not found");
         }
@@ -83,7 +122,7 @@ fn filepath(exercise: &str, test: bool) -> String {
 }
 
 #[cfg(test)]
-mod testmain {
+mod test_main {
     use super::*;
     #[test]
     fn test_solve() {
