@@ -1,6 +1,7 @@
 include!("01.rs");
 include!("02.rs");
 include!("03.rs");
+include!("04.rs");
 pub enum Solutions {
     One {},
     Two {
@@ -14,6 +15,12 @@ pub enum Solutions {
         batteries1: Vec<u32>,
         sum2: u64,
         batteries2: Vec<u64>,
+    },
+    Four {
+        accessible: u32,
+        results: Vec<Vec<char>>,
+        removed: u32,
+        final_grid: Vec<Vec<char>>,
     },
 }
 
@@ -79,6 +86,57 @@ impl std::fmt::Debug for Solutions {
                     }
                 )
             }
+            Solutions::Four {
+                accessible,
+                results,
+                removed,
+                final_grid,
+            } => {
+                write!(
+                    f,
+                    "Solution Four:\naccessible = {}\nremoved = {}\nresults = \n{}\n\nfinal_grid = \n{}",
+                    accessible,
+                    removed,
+                    if results.len() <= 10 {
+                        format!(
+                            "{}",
+                            results.iter()
+                                .map(|row| row.iter().collect::<String>())
+                                .collect::<Vec<String>>()
+                                .join("\n")
+                        )
+                    } else {
+                        format!(
+                            "[{} ... {}]",
+                            results[0][0..results[0].len().min(10)]
+                                .iter()
+                                .collect::<String>(),
+                            results[results.len() - 1][0..results[results.len() - 1].len().min(10)]
+                                .iter()
+                                .collect::<String>()
+                        )
+                    },
+                    if final_grid.len() <= 10 {
+                        format!(
+                            "{}",
+                            final_grid.iter()
+                                .map(|row| row.iter().collect::<String>())
+                                .collect::<Vec<String>>()
+                                .join("\n")
+                        )
+                    } else {
+                        format!(
+                            "[{} ... {}]",
+                            final_grid[0][0..final_grid[0].len().min(10)]
+                                .iter()
+                                .collect::<String>(),
+                            final_grid[final_grid.len() - 1][0..final_grid[final_grid.len() - 1].len().min(10)]
+                                .iter()
+                                .collect::<String>()
+                        )
+                    }
+                )
+            }
         }
     }
 }
@@ -106,6 +164,7 @@ fn solve(exercise: &str, test: bool) {
         "01" => solve1(test),
         "02" => solve2(&content),
         "03" => solve3(&content),
+        "04" => solve4(&content),
         _ => {
             panic!("Exercise not found");
         }
