@@ -2,6 +2,7 @@ include!("01.rs");
 include!("02.rs");
 include!("03.rs");
 include!("04.rs");
+include!("05.rs");
 pub enum Solutions {
     One {},
     Two {
@@ -21,6 +22,12 @@ pub enum Solutions {
         results: Vec<Vec<char>>,
         removed: u32,
         final_grid: Vec<Vec<char>>,
+    },
+    Five {
+        result1: u32,
+        good_ids: Vec<u64>,
+        total_good_ids_count: u64,
+        final_ranges: Vec<(u64, u64)>,
     },
 }
 
@@ -100,7 +107,8 @@ impl std::fmt::Debug for Solutions {
                     if results.len() <= 10 {
                         format!(
                             "{}",
-                            results.iter()
+                            results
+                                .iter()
                                 .map(|row| row.iter().collect::<String>())
                                 .collect::<Vec<String>>()
                                 .join("\n")
@@ -119,7 +127,8 @@ impl std::fmt::Debug for Solutions {
                     if final_grid.len() <= 10 {
                         format!(
                             "{}",
-                            final_grid.iter()
+                            final_grid
+                                .iter()
                                 .map(|row| row.iter().collect::<String>())
                                 .collect::<Vec<String>>()
                                 .join("\n")
@@ -130,9 +139,41 @@ impl std::fmt::Debug for Solutions {
                             final_grid[0][0..final_grid[0].len().min(10)]
                                 .iter()
                                 .collect::<String>(),
-                            final_grid[final_grid.len() - 1][0..final_grid[final_grid.len() - 1].len().min(10)]
+                            final_grid[final_grid.len() - 1]
+                                [0..final_grid[final_grid.len() - 1].len().min(10)]
                                 .iter()
                                 .collect::<String>()
+                        )
+                    }
+                )
+            }
+            Solutions::Five {
+                result1,
+                good_ids,
+                total_good_ids_count,
+                final_ranges,
+            } => {
+                write!(
+                    f,
+                    "Solution Five: result1 = {}, good_ids = {:?}, total_good_ids_count = {}, final_ranges = {:?}",
+                    result1,
+                    if good_ids.len() < 10 {
+                        format!("{:?}", good_ids)
+                    } else {
+                        format!("[{} ... {}]", good_ids[0], good_ids[good_ids.len() - 1])
+                    },
+                    total_good_ids_count,
+                    if final_ranges.len() < 10 {
+                        format!("{:?}", final_ranges)
+                    } else {
+                        format!(
+                            "[{} ... {}]",
+                            format!("{}-{}", final_ranges[0].0, final_ranges[0].1),
+                            format!(
+                                "{}-{}",
+                                final_ranges[final_ranges.len() - 1].0,
+                                final_ranges[final_ranges.len() - 1].1
+                            )
                         )
                     }
                 )
@@ -165,6 +206,7 @@ fn solve(exercise: &str, test: bool) {
         "02" => solve2(&content),
         "03" => solve3(&content),
         "04" => solve4(&content),
+        "05" => solve5(&content),
         _ => {
             panic!("Exercise not found");
         }
